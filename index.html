@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>光影相册 - 图片展示网站</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="site-header">
+        <nav class="topbar" aria-label="主导航">
+            <a class="brand" href="#galleryGrid" aria-label="光影相册首页">
+                <span class="brand-mark" aria-hidden="true">◎</span>
+                <span>光影相册</span>
+            </a>
+            <div class="topbar-actions" aria-label="展示模式">
+                <button class="icon-btn is-active" id="gridViewBtn" type="button" title="网格视图" aria-label="网格视图">▦</button>
+                <button class="icon-btn" id="largeViewBtn" type="button" title="大图视图" aria-label="大图视图">▤</button>
+            </div>
+        </nav>
+
+        <section class="hero" aria-labelledby="pageTitle">
+            <div class="hero-copy">
+                <p class="eyebrow">Photo Gallery</p>
+                <h1 id="pageTitle">把照片安静、清晰、漂亮地展示出来。</h1>
+                <p class="hero-text">支持搜索、分类、排序、本地上传预览和全屏灯箱浏览，适合摄影作品集、旅行相册或产品图集。</p>
+            </div>
+            <div class="hero-preview" aria-hidden="true">
+                <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" alt="">
+                <div class="preview-stack">
+                    <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=500&q=80" alt="">
+                    <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=500&q=80" alt="">
+                </div>
+            </div>
+        </section>
+    </header>
+
+    <main>
+        <section class="toolbar" aria-label="图片工具栏">
+            <label class="search-field" for="searchInput">
+                <span aria-hidden="true">⌕</span>
+                <input type="search" id="searchInput" placeholder="搜索标题、地点或标签">
+            </label>
+
+            <div class="filter-buttons" role="list" aria-label="图片分类">
+                <button class="filter-btn is-active" type="button" data-filter="all">全部</button>
+                <button class="filter-btn" type="button" data-filter="nature">自然</button>
+                <button class="filter-btn" type="button" data-filter="city">城市</button>
+                <button class="filter-btn" type="button" data-filter="people">人物</button>
+                <button class="filter-btn" type="button" data-filter="still">静物</button>
+            </div>
+
+            <label class="select-field" for="sortSelect">
+                <span>排序</span>
+                <select id="sortSelect">
+                    <option value="featured">推荐优先</option>
+                    <option value="newest">最新优先</option>
+                    <option value="title">标题 A-Z</option>
+                </select>
+            </label>
+
+            <label class="upload-btn" for="uploadInput">
+                <span aria-hidden="true">＋</span>
+                上传图片
+            </label>
+            <input class="visually-hidden" id="uploadInput" type="file" accept="image/*" multiple>
+        </section>
+
+        <section class="stats" aria-label="图库统计">
+            <div>
+                <strong id="visibleCount">0</strong>
+                <span>当前显示</span>
+            </div>
+            <div>
+                <strong id="totalCount">0</strong>
+                <span>图库总数</span>
+            </div>
+            <div>
+                <strong id="categoryCount">0</strong>
+                <span>分类数量</span>
+            </div>
+        </section>
+
+        <section class="gallery-wrap" aria-live="polite">
+            <div class="gallery-grid" id="galleryGrid"></div>
+            <div class="empty-state" id="emptyState" hidden>
+                <span aria-hidden="true">⌕</span>
+                <h2>没有找到匹配的图片</h2>
+                <p>换个关键词或切换到“全部”分类试试。</p>
+            </div>
+        </section>
+    </main>
+
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片预览" hidden>
+        <button class="lightbox-close" id="lightboxClose" type="button" aria-label="关闭">×</button>
+        <button class="lightbox-nav lightbox-prev" id="lightboxPrev" type="button" aria-label="上一张">‹</button>
+        <figure class="lightbox-stage">
+            <img class="lightbox-image" id="lightboxImage" src="" alt="">
+            <figcaption class="lightbox-caption">
+                <span id="lightboxCounter"></span>
+                <strong id="lightboxTitle"></strong>
+                <small id="lightboxMeta"></small>
+            </figcaption>
+        </figure>
+        <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="下一张">›</button>
+    </div>
+
+    <footer class="footer">
+        <p>© 2026 光影相册 · 一个轻量的图片展示网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
