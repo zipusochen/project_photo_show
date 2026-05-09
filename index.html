@@ -10,12 +10,13 @@
     <header class="site-header">
         <nav class="topbar" aria-label="主导航">
             <a class="brand" href="#galleryGrid" aria-label="光影相册首页">
-                <span class="brand-mark" aria-hidden="true">◎</span>
+                <span class="brand-mark" aria-hidden="true">◆</span>
                 <span>光影相册</span>
             </a>
             <div class="topbar-actions" aria-label="展示模式">
                 <button class="icon-btn is-active" id="gridViewBtn" type="button" title="网格视图" aria-label="网格视图">▦</button>
                 <button class="icon-btn" id="largeViewBtn" type="button" title="大图视图" aria-label="大图视图">▤</button>
+                <button class="icon-btn" id="listViewBtn" type="button" title="列表视图" aria-label="列表视图">☰</button>
             </div>
         </nav>
 
@@ -23,7 +24,7 @@
             <div class="hero-copy">
                 <p class="eyebrow">Photo Gallery</p>
                 <h1 id="pageTitle">把照片安静、清晰、漂亮地展示出来。</h1>
-                <p class="hero-text">支持搜索、分类、排序、本地上传预览和全屏灯箱浏览，适合摄影作品集、旅行相册或产品图集。</p>
+                <p class="hero-text">支持搜索、分类、排序、收藏、批量选择、本地上传预览和全屏灯箱浏览，适合摄影作品集、旅行相册或产品图库。</p>
             </div>
             <div class="hero-preview" aria-hidden="true">
                 <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" alt="">
@@ -39,7 +40,7 @@
         <section class="toolbar" aria-label="图片工具栏">
             <label class="search-field" for="searchInput">
                 <span aria-hidden="true">⌕</span>
-                <input type="search" id="searchInput" placeholder="搜索标题、地点或标签">
+                <input type="search" id="searchInput" placeholder="搜索标题、地点、标签或说明">
             </label>
 
             <div class="filter-buttons" role="list" aria-label="图片分类">
@@ -48,22 +49,56 @@
                 <button class="filter-btn" type="button" data-filter="city">城市</button>
                 <button class="filter-btn" type="button" data-filter="people">人物</button>
                 <button class="filter-btn" type="button" data-filter="still">静物</button>
+                <button class="filter-btn" type="button" data-filter="favorite">收藏</button>
+                <button class="filter-btn" type="button" data-filter="upload">上传</button>
             </div>
 
-            <label class="select-field" for="sortSelect">
-                <span>排序</span>
-                <select id="sortSelect">
-                    <option value="featured">推荐优先</option>
-                    <option value="newest">最新优先</option>
-                    <option value="title">标题 A-Z</option>
-                </select>
-            </label>
+            <div class="advanced-controls">
+                <label class="select-field" for="sortSelect">
+                    <span>排序</span>
+                    <select id="sortSelect">
+                        <option value="featured">推荐优先</option>
+                        <option value="newest">最新优先</option>
+                        <option value="title">标题 A-Z</option>
+                        <option value="location">地点 A-Z</option>
+                    </select>
+                </label>
 
-            <label class="upload-btn" for="uploadInput">
-                <span aria-hidden="true">＋</span>
-                上传图片
-            </label>
-            <input class="visually-hidden" id="uploadInput" type="file" accept="image/*" multiple>
+                <label class="select-field" for="orientationSelect">
+                    <span>方向</span>
+                    <select id="orientationSelect">
+                        <option value="all">全部</option>
+                        <option value="landscape">横图</option>
+                        <option value="portrait">竖图</option>
+                        <option value="square">方图</option>
+                    </select>
+                </label>
+
+                <label class="select-field" for="toneSelect">
+                    <span>色调</span>
+                    <select id="toneSelect">
+                        <option value="all">全部</option>
+                        <option value="warm">暖色</option>
+                        <option value="cool">冷色</option>
+                        <option value="neutral">中性</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="action-row">
+                <button class="ghost-btn" id="clearFiltersBtn" type="button">清空筛选</button>
+                <button class="ghost-btn" id="selectModeBtn" type="button" aria-pressed="false">批量选择</button>
+                <label class="upload-btn" for="uploadInput">
+                    <span aria-hidden="true">＋</span>
+                    上传图片
+                </label>
+                <input class="visually-hidden" id="uploadInput" type="file" accept="image/*" multiple>
+            </div>
+        </section>
+
+        <section class="drop-zone" id="dropZone" aria-label="拖放上传区域">
+            <strong>把图片拖到这里即可添加到相册</strong>
+            <span>本地图片只保存在当前浏览器预览，不会写入磁盘或上传到服务器。</span>
         </section>
 
         <section class="stats" aria-label="图库统计">
@@ -76,8 +111,20 @@
                 <span>图库总数</span>
             </div>
             <div>
-                <strong id="categoryCount">0</strong>
-                <span>分类数量</span>
+                <strong id="favoriteCount">0</strong>
+                <span>已收藏</span>
+            </div>
+            <div>
+                <strong id="selectedCount">0</strong>
+                <span>已选择</span>
+            </div>
+        </section>
+
+        <section class="selection-bar" id="selectionBar" aria-live="polite" hidden>
+            <span id="selectionSummary">已选择 0 张</span>
+            <div>
+                <button class="ghost-btn" id="favoriteSelectedBtn" type="button">收藏所选</button>
+                <button class="ghost-btn" id="clearSelectionBtn" type="button">取消选择</button>
             </div>
         </section>
 
@@ -86,7 +133,7 @@
             <div class="empty-state" id="emptyState" hidden>
                 <span aria-hidden="true">⌕</span>
                 <h2>没有找到匹配的图片</h2>
-                <p>换个关键词或切换到“全部”分类试试。</p>
+                <p>换个关键词、清空筛选，或切换到“全部”分类试试。</p>
             </div>
         </section>
     </main>
@@ -100,6 +147,14 @@
                 <span id="lightboxCounter"></span>
                 <strong id="lightboxTitle"></strong>
                 <small id="lightboxMeta"></small>
+                <p id="lightboxDescription"></p>
+                <div class="lightbox-tags" id="lightboxTags"></div>
+                <div class="lightbox-actions">
+                    <button class="lightbox-action" id="favoriteLightboxBtn" type="button">收藏</button>
+                    <button class="lightbox-action" id="downloadLightboxBtn" type="button">下载</button>
+                    <button class="lightbox-action" id="copyLinkBtn" type="button">复制链接</button>
+                    <button class="lightbox-action" id="slideshowBtn" type="button" aria-pressed="false">播放</button>
+                </div>
             </figcaption>
         </figure>
         <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="下一张">›</button>
